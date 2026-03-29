@@ -146,7 +146,7 @@ export function OrderRow({ order }: OrderRowProps) {
     <>
       <tr className={`border-b border-slate-100 hover:bg-slate-50 transition-colors ${deleting ? "opacity-40 pointer-events-none" : ""} ${expanded ? "bg-blue-50/30" : ""}`}>
         <td className="px-6 py-4 font-medium text-slate-900">
-          #{order._id.slice(-6).toUpperCase()}
+          #{order._id.slice(-8).toUpperCase()}
         </td>
         <td className="px-6 py-4">{order.shippingAddress?.name ?? "—"}</td>
         <td className="px-6 py-4">{order.email ?? "—"}</td>

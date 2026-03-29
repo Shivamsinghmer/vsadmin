@@ -107,7 +107,7 @@ export default async function Dashboard() {
                   return (
                     <tr key={i} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors">
                       <td className="px-6 py-3.5 font-black text-slate-700 text-xs tracking-wide">
-                        #{order._id?.toString().slice(-6).toUpperCase()}
+                        #{order._id?.toString().slice(-8).toUpperCase()}
                       </td>
                       <td className="px-6 py-3.5 text-slate-600 text-xs">
                         {order.shippingAddress?.name || order.email || "—"}
