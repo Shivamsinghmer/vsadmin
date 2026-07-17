@@ -24,21 +24,21 @@ export default async function ProductsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-black text-slate-900 tracking-tight">Products</h1>
-          <p className="text-sm text-slate-400 mt-0.5">{products.length} products in your catalogue</p>
+          <h1 className="text-xl font-bold text-foreground tracking-tight">Products</h1>
+          <p className="text-sm text-slate-500 mt-0.5">{products.length} products in catalogue</p>
         </div>
         <AddProduct categories={categories} />
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-50 flex flex-col sm:flex-row gap-4 justify-between items-center">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row gap-4 justify-between items-center">
           <div className="relative w-full max-w-sm">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Search className="h-3.5 w-3.5 text-slate-300" />
+              <Search className="h-3.5 w-3.5 text-slate-400" />
             </div>
             <input
               type="text"
-              className="bg-slate-50 border border-slate-100 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 block w-full pl-9 py-2.5 outline-none transition"
+              className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 block w-full pl-9 py-2.5 outline-none transition placeholder:text-slate-400"
               placeholder="Search products…"
             />
           </div>
@@ -47,12 +47,12 @@ export default async function ProductsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                <th className="px-6 py-3">Product</th>
-                <th className="px-6 py-3">Category</th>
-                <th className="px-6 py-3">Price</th>
-                <th className="px-6 py-3">Stock</th>
-                <th className="px-6 py-3">Actions</th>
+              <tr className="border-b border-slate-100">
+                <th className="px-6 py-3 text-xs font-semibold text-slate-500">Product</th>
+                <th className="px-6 py-3 text-xs font-semibold text-slate-500">Category</th>
+                <th className="px-6 py-3 text-xs font-semibold text-slate-500">Price</th>
+                <th className="px-6 py-3 text-xs font-semibold text-slate-500">Stock</th>
+                <th className="px-6 py-3 text-xs font-semibold text-slate-500">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -80,7 +80,7 @@ export default async function ProductsPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-4 text-center text-slate-400">
+                  <td colSpan={5} className="px-6 py-12 text-center text-sm text-slate-400">
                     No products found.
                   </td>
                 </tr>
@@ -89,7 +89,7 @@ export default async function ProductsPage() {
           </table>
         </div>
 
-        <div className="px-6 py-3 border-t border-slate-50 text-[11px] text-slate-300 font-bold">
+        <div className="px-6 py-3 border-t border-slate-100 text-xs text-slate-400">
           {products.length} product{products.length !== 1 ? "s" : ""}
         </div>
       </div>

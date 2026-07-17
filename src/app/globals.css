@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8f9fb;
-  --foreground: #0f172a;
+  --background: oklch(0.97 0.006 255);
+  --foreground: oklch(0.18 0.022 255);
 }
 
 @theme inline {
@@ -10,6 +10,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Sidebar */
+  --color-nav: oklch(0.18 0.036 258);
+  --color-nav-hover: oklch(0.24 0.03 258);
+  --color-nav-active: oklch(0.29 0.055 254);
 }
 
 html, body {
@@ -23,34 +28,34 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar-thumb { background: oklch(0.83 0.01 255); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: oklch(0.72 0.015 255); }
 
-/* Toggle switch — the only custom CSS we need */
+/* Toggle switch */
 .toggle-track {
   position: relative;
   display: inline-flex;
   align-items: center;
-  width: 44px;
-  height: 24px;
+  width: 40px;
+  height: 22px;
   border-radius: 99px;
-  background: #e2e8f0;
+  background: oklch(0.87 0.009 255);
   cursor: pointer;
   transition: background 0.2s;
   flex-shrink: 0;
 }
-.toggle-track.on { background: #2563eb; }
+.toggle-track.on { background: oklch(0.55 0.175 254); }
 .toggle-thumb {
   position: absolute;
   left: 3px;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: white;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   transition: transform 0.2s;
 }
-.toggle-track.on .toggle-thumb { transform: translateX(20px); }
+.toggle-track.on .toggle-thumb { transform: translateX(18px); }
