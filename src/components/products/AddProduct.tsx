@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Plus, X, Save, Layers, Trash2, Box, ChevronDown } from "lucide-react";
 
 interface AddProductProps {
-  categories: { _id: string; label: string }[];
+  categories: { _id: string; label?: string; name?: string }[];
 }
 
 interface PricingRow {
@@ -210,7 +210,7 @@ export function AddProduct({ categories }: AddProductProps) {
                       >
                         <option value="">Select Category</option>
                         {categories.map((c) => (
-                          <option key={c._id} value={c._id}>{c.label}</option>
+                          <option key={c._id} value={c._id}>{c.label || c.name || c._id}</option>
                         ))}
                       </select>
                       <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />

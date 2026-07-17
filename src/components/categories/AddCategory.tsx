@@ -35,9 +35,12 @@ export function AddCategory() {
         setIsOpen(false);
         setFormData({ label: "", name: "", description: "" });
         startTransition(() => router.refresh());
+      } else {
+        alert("Error: " + (data.error || "Failed to create category"));
       }
     } catch (error) {
       console.error("Failed to add category:", error);
+      alert("An unexpected error occurred. Please try again.");
     } finally {
       setSaving(false);
     }
