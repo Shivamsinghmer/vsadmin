@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, X, Save, Layers, Trash2, Box, ChevronDown } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 interface AddProductProps {
   categories: { _id: string; label?: string; name?: string }[];
@@ -75,6 +76,7 @@ function TagEditor({
 
 export function AddProduct({ categories }: AddProductProps) {
   const router = useRouter();
+  const toast = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [, startTransition] = useTransition();
   const [saving, setSaving] = useState(false);
@@ -135,15 +137,17 @@ export function AddProduct({ categories }: AddProductProps) {
       });
       const data = await res.json();
       if (data.ok) {
+        const createdName = form.name;
         setIsOpen(false);
         setForm(blankForm());
+        toast(`Product "${createdName}" added`, "success");
         startTransition(() => router.refresh());
       } else {
-        alert("Error: " + (data.error || "Failed to save product"));
+        toast(data.error || "Failed to save product", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("An unexpected error occurred.");
+      toast("An unexpected error occurred.", "error");
     } finally {
       setSaving(false);
     }

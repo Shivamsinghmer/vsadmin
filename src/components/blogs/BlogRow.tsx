@@ -3,6 +3,7 @@
 import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Calendar, Edit3, Trash2, ChevronDown, ChevronUp, Clock, User, Save, X } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 interface BlogRowProps {
   blog: {
@@ -21,6 +22,7 @@ interface BlogRowProps {
 
 export function BlogRow({ blog }: BlogRowProps) {
   const router = useRouter();
+  const toast = useToast();
   const [isPending, startTransition] = useTransition();
   const [deleting, setDeleting] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -53,6 +55,7 @@ export function BlogRow({ blog }: BlogRowProps) {
     if (!confirm(`Delete "${blog.title}"? This cannot be undone.`)) return;
     setDeleting(true);
     await fetch(`/api/blogs/${blog._id}`, { method: "DELETE" });
+    toast(`Blog "${blog.title}" deleted`, "success");
     startTransition(() => router.refresh());
   };
 
@@ -65,9 +68,11 @@ export function BlogRow({ blog }: BlogRowProps) {
         body: JSON.stringify(editData),
       });
       closeModal();
+      toast("Blog updated", "success");
       startTransition(() => router.refresh());
     } catch (error) {
       console.error("Failed to save blog:", error);
+      toast("Failed to save blog", "error");
     } finally {
       setSaving(false);
     }

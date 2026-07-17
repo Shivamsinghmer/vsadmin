@@ -4,6 +4,7 @@ import { useState, useTransition, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Trash2, ChevronDown, ChevronUp, Package, Upload, FileText, Loader2, Check, X } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 function StatusPopup({
   value,
@@ -133,6 +134,7 @@ interface OrderRowProps {
 
 export function OrderRow({ order }: OrderRowProps) {
   const router = useRouter();
+  const toast = useToast();
   const [status, setStatus] = useState(order.status ?? "Processing");
   const [expanded, setExpanded] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -154,6 +156,7 @@ export function OrderRow({ order }: OrderRowProps) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus }),
     });
+    toast(`Order status set to ${newStatus}`, "success");
     startTransition(() => router.refresh());
   };
 
@@ -172,12 +175,13 @@ export function OrderRow({ order }: OrderRowProps) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ paymentStatus: newStatus }),
     });
+    toast(`Payment marked ${newStatus}`, "success");
     startTransition(() => router.refresh());
   };
 
   const handleFileUpload = async (file: File) => {
     if (!file.type.includes("pdf")) {
-      alert("Please upload only PDF files.");
+      toast("Please upload only PDF files.", "error");
       return;
     }
     setIsUploading(true);
@@ -190,13 +194,14 @@ export function OrderRow({ order }: OrderRowProps) {
       });
       const data = await res.json();
       if (data.ok) {
+        toast("Invoice uploaded", "success");
         startTransition(() => router.refresh());
       } else {
-        alert("Upload failed: " + data.error);
+        toast("Upload failed: " + data.error, "error");
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred during upload.");
+      toast("An error occurred during upload.", "error");
     } finally {
       setIsUploading(false);
     }
@@ -215,6 +220,7 @@ export function OrderRow({ order }: OrderRowProps) {
     if (!confirm("Delete this order? This cannot be undone.")) return;
     setDeleting(true);
     await fetch(`/api/orders/${order._id}`, { method: "DELETE" });
+    toast("Order deleted", "success");
     startTransition(() => router.refresh());
   };
 

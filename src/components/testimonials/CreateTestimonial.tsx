@@ -4,9 +4,11 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, X, Save, Star } from "lucide-react";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
+import { useToast } from "@/components/ui/Toast";
 
 export function CreateTestimonial() {
   const router = useRouter();
+  const toast = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [saving, setSaving] = useState(false);
@@ -33,12 +35,17 @@ export function CreateTestimonial() {
       });
       const data = await res.json();
       if (data.ok) {
+        const createdName = formData.name;
         setIsOpen(false);
         setFormData({ name: "", role: "", company: "", quote: "", rating: 5, image: "" });
+        toast(`Testimonial from ${createdName} added`, "success");
         startTransition(() => router.refresh());
+      } else {
+        toast("Failed to add testimonial", "error");
       }
     } catch (error) {
       console.error("Failed to add testimonial:", error);
+      toast("An unexpected error occurred.", "error");
     } finally {
       setSaving(false);
     }

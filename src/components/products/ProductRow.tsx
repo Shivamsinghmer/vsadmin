@@ -8,6 +8,7 @@ import {
   CheckCircle2, XCircle, Save, X, Plus,
   Layers, Box, Settings2, Info, Ruler,
 } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 interface PricingRow {
   _id?: string;
@@ -115,6 +116,7 @@ function TagEditor({
 
 export function ProductRow({ product }: ProductRowProps) {
   const router = useRouter();
+  const toast = useToast();
   const [, startTransition] = useTransition();
 
   const [inStock, setInStock] = useState(product.inStock ?? true);
@@ -176,6 +178,7 @@ export function ProductRow({ product }: ProductRowProps) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ inStock: next }),
     });
+    toast(next ? "Marked in stock" : "Marked out of stock", "success");
     startTransition(() => router.refresh());
   };
 
@@ -191,13 +194,14 @@ export function ProductRow({ product }: ProductRowProps) {
       if (data.ok) {
         setInStock(edit.inStock);
         closeModal();
+        toast("Product updated", "success");
         startTransition(() => router.refresh());
       } else {
-        alert("Error: " + (data.error || "Failed to save product"));
+        toast(data.error || "Failed to save product", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("An unexpected error occurred.");
+      toast("An unexpected error occurred.", "error");
     } finally {
       setSaving(false);
     }
@@ -206,6 +210,7 @@ export function ProductRow({ product }: ProductRowProps) {
   const handleDelete = async () => {
     if (!confirm(`Delete "${product.name}"? This cannot be undone.`)) return;
     await fetch(`/api/products/${product._id}`, { method: "DELETE" });
+    toast(`Product "${product.name}" deleted`, "success");
     startTransition(() => router.refresh());
   };
 

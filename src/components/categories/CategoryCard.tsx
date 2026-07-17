@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Folder, Edit3, Trash2, Save, X } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 interface CategoryCardProps {
   category: {
@@ -16,6 +17,7 @@ interface CategoryCardProps {
 
 export function CategoryCard({ category }: CategoryCardProps) {
   const router = useRouter();
+  const toast = useToast();
   const [isPending, startTransition] = useTransition();
   const [deleting, setDeleting] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -27,6 +29,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
     if (!confirm(`Delete category "${label}"? This cannot be undone.`)) return;
     setDeleting(true);
     await fetch(`/api/categories/${category._id}`, { method: "DELETE" });
+    toast(`Category "${label}" deleted`, "success");
     startTransition(() => router.refresh());
   };
 
@@ -39,6 +42,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
     });
     setSaving(false);
     setEditing(false);
+    toast("Category updated", "success");
     startTransition(() => router.refresh());
   };
 

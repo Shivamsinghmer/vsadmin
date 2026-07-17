@@ -4,6 +4,7 @@ import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2, Star, Edit3, Save, X } from "lucide-react";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
+import { useToast } from "@/components/ui/Toast";
 
 interface TestimonialType {
   _id: string;
@@ -17,6 +18,7 @@ interface TestimonialType {
 
 export function TestimonialRow({ testimonial }: { testimonial: TestimonialType }) {
   const router = useRouter();
+  const toast = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -42,6 +44,7 @@ export function TestimonialRow({ testimonial }: { testimonial: TestimonialType }
     if (!confirm("Are you sure you want to delete this testimonial?")) return;
     setIsDeleting(true);
     await fetch(`/api/testimonials/${testimonial._id}`, { method: "DELETE" });
+    toast(`Testimonial from ${testimonial.name} deleted`, "success");
     startTransition(() => router.refresh());
   };
 
@@ -56,12 +59,13 @@ export function TestimonialRow({ testimonial }: { testimonial: TestimonialType }
       const data = await res.json();
       if (data.ok) {
         setIsEditing(false);
+        toast("Testimonial updated", "success");
         startTransition(() => router.refresh());
       } else {
-        alert("Failed to save.");
+        toast("Failed to save testimonial", "error");
       }
     } catch {
-      alert("An error occurred.");
+      toast("An error occurred.", "error");
     } finally {
       setSaving(false);
     }

@@ -3,9 +3,11 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, X, Save, Image as ImageIcon, LayoutIcon } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 export function CreateBlog() {
   const router = useRouter();
+  const toast = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [saving, setSaving] = useState(false);
@@ -32,6 +34,7 @@ export function CreateBlog() {
       });
       const data = await res.json();
       if (data.ok) {
+        const createdTitle = formData.title;
         setIsOpen(false);
         setFormData({
             title: "",
@@ -41,10 +44,14 @@ export function CreateBlog() {
             author: "Admin",
             readTime: "5 min read",
         });
+        toast(`Blog "${createdTitle}" published`, "success");
         startTransition(() => router.refresh());
+      } else {
+        toast("Failed to publish blog", "error");
       }
     } catch (error) {
       console.error("Failed to add blog post:", error);
+      toast("An unexpected error occurred.", "error");
     } finally {
       setSaving(false);
     }

@@ -3,9 +3,11 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, X, Save } from "lucide-react";
+import { useToast } from "@/components/ui/Toast";
 
 export function AddCategory() {
   const router = useRouter();
+  const toast = useToast();
   const [, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -34,13 +36,14 @@ export function AddCategory() {
       if (data.ok) {
         setIsOpen(false);
         setFormData({ label: "", name: "", description: "" });
+        toast(`Category "${formData.label}" created`, "success");
         startTransition(() => router.refresh());
       } else {
-        alert("Error: " + (data.error || "Failed to create category"));
+        toast(data.error || "Failed to create category", "error");
       }
     } catch (error) {
       console.error("Failed to add category:", error);
-      alert("An unexpected error occurred. Please try again.");
+      toast("An unexpected error occurred. Please try again.", "error");
     } finally {
       setSaving(false);
     }
