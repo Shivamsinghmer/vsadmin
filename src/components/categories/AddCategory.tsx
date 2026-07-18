@@ -27,7 +27,11 @@ export function AddCategory() {
       const slug = (formData.name || formData.label)
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, "-");
+        .replace(/[&]/g, "and")
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
       const res = await fetch("/api/categories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
